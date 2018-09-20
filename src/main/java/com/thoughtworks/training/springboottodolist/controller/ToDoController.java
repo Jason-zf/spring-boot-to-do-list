@@ -1,8 +1,11 @@
 package com.thoughtworks.training.springboottodolist.controller;
 
+import com.thoughtworks.training.springboottodolist.exception.NotFoundException;
 import com.thoughtworks.training.springboottodolist.model.ToDo;
 import com.thoughtworks.training.springboottodolist.service.ToDoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,23 +23,29 @@ public class ToDoController {
     }
 
     @GetMapping(value = "/{id}")
-    public ToDo getToDoById(@PathVariable Long id) {
+    public ToDo getToDoById(@PathVariable Long id) throws NotFoundException {
         return toDoService.getToDoById(id);
     }
 
     @PostMapping
-    public void addToDo(@RequestBody ToDo toDo) {
-        toDoService.addToDo(toDo);
+    public ToDo addToDo(@RequestBody ToDo toDo) {
+        return toDoService.addToDo(toDo);
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable Long id) {
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable Long id) throws NotFoundException {
         toDoService.deleteById(id);
     }
 
-    @RequestMapping(value = "/update/{id}")
-    public void update(@PathVariable Long id,@RequestBody ToDo toDo){
-        toDoService.update(id,toDo);
+    @PutMapping
+    public void update(@RequestBody ToDo toDo) throws NotFoundException {
+        toDoService.update(toDo.getId(), toDo);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public Page<ToDo> getItemsByPageAndSize(Pageable pageable) {
+        Page<ToDo> result = toDoService.findAllByPage(pageable);
+        return result;
     }
 
 }

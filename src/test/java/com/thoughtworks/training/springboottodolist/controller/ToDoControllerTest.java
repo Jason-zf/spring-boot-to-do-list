@@ -1,30 +1,19 @@
 package com.thoughtworks.training.springboottodolist.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableList;
-import com.thoughtworks.training.springboottodolist.model.Tag;
-import com.thoughtworks.training.springboottodolist.model.ToDo;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.Date;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
 public class ToDoControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+//    @Autowired
+//    private MockMvc mockMvc;
 
 //    @MockBean
 //    private ToDoService toDoService;
@@ -65,24 +54,24 @@ public class ToDoControllerTest {
 //    }
 
 
-    @Test
-    public void addToDo() throws Exception {
-        Tag tag=new Tag("tag");
-        ToDo toDo = new ToDo( "test1", "In progress", new Date(), ImmutableList.of(tag));
-        mockMvc.perform(
-                post("/todos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(parseIntoJsonString(toDo)))
-                .andExpect(status().isOk());
-    }
-
-    private String parseIntoJsonString(Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    @Test
+//    public void addToDo() throws Exception {
+//        Tag tag = new Tag("tag");
+//        ToDo toDo = new ToDo("test1", "In progress", new Date(), ImmutableList.of(tag));
+//        mockMvc.perform(
+//                post("/todos")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(parseIntoJsonString(toDo)))
+//                .andExpect(status().isOk());
+//    }
+//
+//    private String parseIntoJsonString(Object obj) {
+//        try {
+//            return new ObjectMapper().writeValueAsString(obj);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 //    @Test
 //    public void shouldDeleteToDoById() throws Exception {

@@ -8,7 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Date;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/todos")
@@ -18,8 +19,14 @@ public class ToDoController {
     private ToDoService toDoService;
 
     @GetMapping
-    public List<ToDo> getAllToDoItems() {
-        return toDoService.getToDoList();
+    public Page<ToDo> getAllToDoItems(Pageable pageable,
+                                      @RequestParam(value = "tag", required = false) String tag,
+                                      @RequestParam(value = "from", required = false) Date from,
+                                      @RequestParam(value = "to", required = false) Date to) {
+        System.out.println(tag);
+        System.out.println(from);
+        System.out.println(from);
+        return toDoService.getToDoList(pageable, Optional.ofNullable(tag), Optional.ofNullable(from), Optional.ofNullable(to));
     }
 
     @GetMapping(value = "/{id}")
@@ -42,10 +49,10 @@ public class ToDoController {
         toDoService.update(toDo.getId(), toDo);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public Page<ToDo> getItemsByPageAndSize(Pageable pageable) {
-        Page<ToDo> result = toDoService.findAllByPage(pageable);
-        return result;
-    }
+//    @GetMapping
+//    public Page<ToDo> getItemsByPageAndSize(Pageable pageable) {
+//        Page<ToDo> result = toDoService.findAllByPage(pageable);
+//        return result;
+//    }
 
 }

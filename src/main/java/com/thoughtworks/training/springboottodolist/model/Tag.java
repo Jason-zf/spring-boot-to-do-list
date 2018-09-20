@@ -1,14 +1,9 @@
 package com.thoughtworks.training.springboottodolist.model;
 
-import lombok.Builder;
-import lombok.Data;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import java.io.Serializable;
-import java.util.List;
 
 @Entity
 public class Tag implements Serializable {

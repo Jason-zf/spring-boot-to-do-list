@@ -1,17 +1,22 @@
 package com.thoughtworks.training.springboottodolist.service;
 
+import com.google.common.primitives.Booleans;
 import com.thoughtworks.training.springboottodolist.exception.NotFoundException;
 import com.thoughtworks.training.springboottodolist.model.Tag;
 import com.thoughtworks.training.springboottodolist.model.ToDo;
 import com.thoughtworks.training.springboottodolist.model.User;
 import com.thoughtworks.training.springboottodolist.repository.ToDoRepository;
+import javassist.tools.web.BadHttpRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.HTMLDocument;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,10 +50,22 @@ public class ToDoService {
 
     }
 
-    public List<ToDo> getToDoList() {
+    public Page<ToDo> getToDoList(Pageable pageable, Optional<String> tag, Optional<Date> startDate, Optional<Date> endDate) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println("user id: " + user.getId());
-        return toDoRepository.findAll().stream().filter(item -> user.getId() == item.getUserId()).collect(Collectors.toList());
+        if (Booleans.countTrue(startDate.isPresent(), endDate.isPresent()) == 1) {
+            //throw new BadRequestException("startDate and endDate appear in same time");
+            return null;
+        } else {
+            if (startDate.isPresent() && tag.isPresent()) {
+                return toDoRepository.findAllByUserIdAndTags_NameInAndDueDateIsBetween(user.getId(), tag.get(), startDate.get(), endDate.get(), pageable);
+            } else if (startDate.isPresent()) {
+                return toDoRepository.findAllByUserIdAndDueDateIsBetween(user.getId(), startDate.get(), endDate.get(), pageable);
+            } else if (tag.isPresent()) {
+                return toDoRepository.findAllByUserIdAndTags_name(user.getId(), tag.get(), pageable);
+            } else {
+                return toDoRepository.findByUserId(user.getId(), pageable);
+            }
+        }
     }
 
     public ToDo getToDoById(Long id) throws NotFoundException {

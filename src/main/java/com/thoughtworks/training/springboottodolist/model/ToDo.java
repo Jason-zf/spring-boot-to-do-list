@@ -1,7 +1,5 @@
 package com.thoughtworks.training.springboottodolist.model;
 
-import lombok.Builder;
-
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +12,7 @@ public class ToDo {
     private String name;
     private String status;
     private Date dueDate;
+    private Long userId;
 
 
     @ManyToMany
@@ -24,10 +23,11 @@ public class ToDo {
     public ToDo() {
     }
 
-    public ToDo(String name, String status, Date dueDate, List<Tag> tags) {
+    public ToDo(String name, String status, Date dueDate, Long userId, List<Tag> tags) {
         this.name = name;
         this.status = status;
         this.dueDate = dueDate;
+        this.userId = userId;
         this.tags = tags;
     }
 
@@ -69,5 +69,13 @@ public class ToDo {
 
     public void setTags(List<Tag> tags) {
         this.tags = tags;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 }

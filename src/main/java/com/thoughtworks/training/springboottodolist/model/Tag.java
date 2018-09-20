@@ -25,12 +25,8 @@ public class Tag implements Serializable {
         this.name = name;
     }
 
-    @ManyToMany(mappedBy = "tags")
-    private List<ToDo> toDos;
-
-    public void add(ToDo toDo) {
-        this.toDos.add(toDo);
-    }
+//    @ManyToMany(mappedBy = "tags")
+//    private List<ToDo> toDos;
 
     public Long getId() {
         return id;
@@ -48,11 +44,4 @@ public class Tag implements Serializable {
         this.name = name;
     }
 
-    public List<ToDo> getToDos() {
-        return toDos;
-    }
-
-    public void setToDos(List<ToDo> toDos) {
-        this.toDos = toDos;
-    }
 }

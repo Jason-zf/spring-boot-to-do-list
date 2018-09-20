@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS tag (
+CREATE TABLE IF NOT EXISTS todo_tags (
   `id`   bigint(20) NOT NULL AUTO_INCREMENT,
   `todo_id` bigint(20),
   `tag_id` bigint(20),

@@ -12,7 +12,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private TokenServce tokenServce;
+    private TokenService tokenService;
 
     public User addUser(User user) {
         if (userRepository.findByName(user.getName()) == null) {
@@ -24,7 +24,7 @@ public class UserService {
     public String isLogIn(User user) {
         User user1 = userRepository.findByName(user.getName());
         if (user1 != null && user.getPassword().equals(user.getPassword())) {
-            return tokenServce.createToken(user1).getName();
+            return tokenService.createToken(user1);
         }
         return "login failed";
     }

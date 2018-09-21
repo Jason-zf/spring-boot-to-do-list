@@ -3,7 +3,7 @@ package com.thoughtworks.training.springboottodolist.security;
 import com.google.common.collect.ImmutableList;
 import com.google.common.net.HttpHeaders;
 import com.thoughtworks.training.springboottodolist.model.User;
-import com.thoughtworks.training.springboottodolist.service.TokenServce;
+import com.thoughtworks.training.springboottodolist.service.TokenService;
 import com.thoughtworks.training.springboottodolist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,15 +20,15 @@ import java.io.IOException;
 @Component
 public class LoginFilter extends OncePerRequestFilter {
     @Autowired
-    private TokenServce tokenServce;
+    private TokenService tokenService;
     @Autowired
     private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header != null) {
-            Long userId = tokenServce.findByName(header).getUserId();
+        String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (token != null) {
+            Long userId = tokenService.parseToken(token);
             if (userId == null) {
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
                 return;

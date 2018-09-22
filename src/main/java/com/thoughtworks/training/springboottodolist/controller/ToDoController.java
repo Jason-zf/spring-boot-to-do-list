@@ -23,9 +23,6 @@ public class ToDoController {
                                       @RequestParam(value = "tag", required = false) String tag,
                                       @RequestParam(value = "from", required = false) Date from,
                                       @RequestParam(value = "to", required = false) Date to) {
-        System.out.println(tag);
-        System.out.println(from);
-        System.out.println(from);
         return toDoService.getToDoList(pageable, Optional.ofNullable(tag), Optional.ofNullable(from), Optional.ofNullable(to));
     }
 
@@ -49,10 +46,5 @@ public class ToDoController {
         toDoService.update(toDo.getId(), toDo);
     }
 
-//    @GetMapping
-//    public Page<ToDo> getItemsByPageAndSize(Pageable pageable) {
-//        Page<ToDo> result = toDoService.findAllByPage(pageable);
-//        return result;
-//    }
 
 }

@@ -27,8 +27,6 @@ public class UserController {
     public String logIn(@RequestBody User user, HttpServletResponse response) {
         String token = userService.isLogIn(user);
         response.addHeader("Authentication", token);
-//        User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        System.out.println(user);
         return token;
     }
 }

@@ -1,10 +1,11 @@
 package com.thoughtworks.training.springboottodolist.service;
 
 import com.thoughtworks.training.springboottodolist.model.User;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class TokenService {
@@ -20,11 +21,11 @@ public class TokenService {
 
     public Long parseToken(String signature) {
         try {
-            Claims claims = Jwts.parser()
+            Map<String, Object> claims = Jwts.parser()
                     .setSigningKey(SECRET_KEY)
                     .parseClaimsJws(signature)
                     .getBody();
-            return claims.get("user_id", Long.class);
+            return new Long((Integer) claims.get("user_id"));
         } catch (RuntimeException e) {
             return null;
         }

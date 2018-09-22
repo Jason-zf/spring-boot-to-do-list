@@ -66,7 +66,6 @@ public class ToDoService {
 
     public ToDo getToDoById(Long id) throws NotFoundException {
         User user1 = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        System.out.println(user1);
         ToDo toDo = toDoRepository.findOne(id);
         if (toDo != null && user1.getId().equals(toDo.getUserId())) {
             return toDoRepository.findOne(id);

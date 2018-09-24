@@ -1,5 +1,6 @@
 package com.thoughtworks.training.springboottodolist.controller;
 
+import com.thoughtworks.training.springboottodolist.exception.NotFoundException;
 import com.thoughtworks.training.springboottodolist.model.User;
 import com.thoughtworks.training.springboottodolist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 public class UserController {
 
-
     @Autowired
     private UserService userService;
-
 
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public User add(@RequestBody User user) {
@@ -24,7 +23,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String logIn(@RequestBody User user, HttpServletResponse response) {
+    public String logIn(@RequestBody User user, HttpServletResponse response) throws NotFoundException {
         String token = userService.isLogIn(user);
         response.addHeader("Authentication", token);
         return token;

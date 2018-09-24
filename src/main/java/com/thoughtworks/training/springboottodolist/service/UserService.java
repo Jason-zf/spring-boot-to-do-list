@@ -1,5 +1,6 @@
 package com.thoughtworks.training.springboottodolist.service;
 
+import com.thoughtworks.training.springboottodolist.exception.NotFoundException;
 import com.thoughtworks.training.springboottodolist.model.User;
 import com.thoughtworks.training.springboottodolist.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,12 @@ public class UserService {
         return user;
     }
 
-    public String isLogIn(User user) {
+    public String isLogIn(User user) throws NotFoundException {
         User user1 = userRepository.findByName(user.getName());
         if (user1 != null && user.getPassword().equals(user.getPassword())) {
             return tokenService.createToken(user1);
         }
-        return "login failed";
+        throw new NotFoundException();
     }
 
     public User findById(Long userId) {

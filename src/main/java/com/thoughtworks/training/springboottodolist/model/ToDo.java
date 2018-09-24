@@ -1,10 +1,17 @@
 package com.thoughtworks.training.springboottodolist.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ToDo {
     @Id
     @GeneratedValue
@@ -19,9 +26,6 @@ public class ToDo {
     @JoinTable(name = "todo_tags", joinColumns = @JoinColumn(name = "todo_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<Tag> tags;
-
-    public ToDo() {
-    }
 
     public ToDo(String name, String status, Date dueDate, Long userId, List<Tag> tags) {
         this.name = name;

@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,29 +25,7 @@ public class ToDoService {
     @Autowired
     TagService tagService;
 
-    public ToDoService() {
-//        Tag tag1 = new Tag("C++");
-//        Tag tag2 = new Tag("Java");
-//        Tag tag3 = new Tag("Javascript");
-//        Tag tag4 = new Tag("python");
-//
-//        ToDo toDo = new ToDo("test2", "To Do", new Date(), ImmutableList.of(tag2, tag3));
-//        ToDo toDo1 = new ToDo("test1", "In progress", new Date(), ImmutableList.of(tag1));
-//        ToDo toDo2 = new ToDo("world", "Blocked", new Date(), ImmutableList.of(tag1, tag4));
-//        ToDo toDo3 = new ToDo("hello", "In progress", new Date(), ImmutableList.of(tag4));
-//        ToDo toDo4 = new ToDo("hack", "To Do", new Date(), ImmutableList.of(tag1, tag3));
-//
-//        toDoRepository.save(ImmutableList.of(toDo, toDo1, toDo2, toDo3, toDo4));
-//        tag1.setToDos(ImmutableList.of(toDo1, toDo2, toDo4));
-//        tag2.setToDos(ImmutableList.of(toDo));
-//        tag3.setToDos(ImmutableList.of(toDo, toDo4));
-//        tag4.setToDos(ImmutableList.of(toDo2, toDo3));
-//
-//        tagService.save(ImmutableList.of(tag1, tag2, tag3, tag4));
-
-    }
-
-    public Page<ToDo> getToDoList(Pageable pageable, Optional<String> tag, Optional<Date> startDate, Optional<Date> endDate) {
+    public Page<ToDo> getToDoList(Pageable pageable, Optional<List<String>> tag, Optional<Date> startDate, Optional<Date> endDate) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (Booleans.countTrue(startDate.isPresent(), endDate.isPresent()) == 1) {
             //throw new BadRequestException("startDate and endDate appear in same time");
@@ -57,7 +36,7 @@ public class ToDoService {
             } else if (startDate.isPresent()) {
                 return toDoRepository.findAllByUserIdAndDueDateIsBetween(user.getId(), startDate.get(), endDate.get(), pageable);
             } else if (tag.isPresent()) {
-                return toDoRepository.findAllByUserIdAndTags_name(user.getId(), tag.get(), pageable);
+                return toDoRepository.findAllByUserIdAndTags_nameIn(user.getId(), tag.get(), pageable);
             } else {
                 return toDoRepository.findByUserId(user.getId(), pageable);
             }
@@ -104,6 +83,7 @@ public class ToDoService {
                     tag.setId(tagService.findByName(tag.getName()).getId());
                 }
             }
+            toDo.setUserId(((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
             toDoRepository.save(toDo);
             return toDo;
         } else {
@@ -112,9 +92,14 @@ public class ToDoService {
 
     }
 
+
     public Page<ToDo> findAllByPage(Pageable toDoPageable) {
         return toDoRepository.findAll(toDoPageable);
     }
 
 
+    public Page<ToDo> findToDosByNameContains(String name, Pageable pageable) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return toDoRepository.findAllByUserIdAndNameContains(user.getId(), name, pageable);
+    }
 }

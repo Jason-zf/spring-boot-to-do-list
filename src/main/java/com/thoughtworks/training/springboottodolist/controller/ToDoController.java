@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,10 +21,15 @@ public class ToDoController {
 
     @GetMapping
     public Page<ToDo> getAllToDoItems(Pageable pageable,
-                                      @RequestParam(value = "tag", required = false) String tag,
+                                      @RequestParam(value = "tag", required = false) List<String> tag,
                                       @RequestParam(value = "from", required = false) Date from,
                                       @RequestParam(value = "to", required = false) Date to) {
         return toDoService.getToDoList(pageable, Optional.ofNullable(tag), Optional.ofNullable(from), Optional.ofNullable(to));
+    }
+
+    @GetMapping(value = "/search/{name}")
+    public Page<ToDo> getToDosByName(Pageable pageable, @PathVariable String name) {
+        return toDoService.findToDosByNameContains(name, pageable);
     }
 
     @GetMapping(value = "/{id}")
@@ -37,13 +43,14 @@ public class ToDoController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable Long id) throws NotFoundException {
+    public String delete(@PathVariable Long id) throws NotFoundException {
         toDoService.deleteById(id);
+        return "delete successfully!";
     }
 
     @PutMapping
-    public void update(@RequestBody ToDo toDo) throws NotFoundException {
-        toDoService.update(toDo.getId(), toDo);
+    public ToDo update(@RequestBody ToDo toDo) throws NotFoundException {
+        return toDoService.update(toDo.getId(), toDo);
     }
 
 

@@ -5,6 +5,8 @@ import com.thoughtworks.training.springboottodolist.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TagService {
 
@@ -17,5 +19,9 @@ public class TagService {
 
     public Tag findByName(String name) {
         return tagRepository.findByName(name);
+    }
+
+    public List<Tag> findAll() {
+        return tagRepository.findAll();
     }
 }
